@@ -116,7 +116,7 @@ function App() {
                 </block>
             </div>
 
-            <h3>Copyright &copy; 2020 mytodo 😀</h3>
+            <h3>Copyright &copy; 2020 mytodo <span>😀</span></h3>
         </>
     );
 }
