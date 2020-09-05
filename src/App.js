@@ -19,7 +19,7 @@ function App() {
         // bai tap 1: check duplicate
         for(var i = 0;i<tasks.length;i++)
         {
-            if(newTaskDescription !== tasks[i].description)
+            if(newTaskDescription !== tasks[i].description || newTaskDescription !== "")
             {
                 const newTask1 = {
                     done: false,
@@ -35,7 +35,7 @@ function App() {
             }
         }
 
-        if (newTaskDescription !== "") {
+        /*if (newTaskDescription !== "") {
             const newTask = {
                 done: false,
                 description: newTaskDescription
@@ -47,7 +47,7 @@ function App() {
             setError("");
         } else {
             setError("Task cannot be empty");
-        }
+        }*/
     };
 
     const removeTask = (indexToBeDeleted) => {
