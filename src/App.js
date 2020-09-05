@@ -17,6 +17,23 @@ function App() {
 
     const handleClickAdd = (event) => {
         // bai tap 1: check duplicate
+        for(var i = 0;i<tasks.length;i++)
+        {
+            if(newTaskDescription !== tasks[i].description)
+            {
+                const newTask1 = {
+                    done: false,
+                    description: newTaskDescription
+                };
+
+                const newTaskList1 = [newTask1,...tasks];
+                setTasks(newTaskList1);
+                setNewTaskDescription("");
+                setError("");
+            } else{
+                setError("You have created");
+            }
+        }
 
         if (newTaskDescription !== "") {
             const newTask = {
