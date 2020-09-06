@@ -96,7 +96,6 @@ function App() {
     const handleCheckboxOnChange = (event, indexToBeDone) => {
         // bai tap 2
         console.log(event);
-        const checked = event.target.checked;
     }
 
     return (
