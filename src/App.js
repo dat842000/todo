@@ -17,20 +17,25 @@ function App() {
 
     const handleClickAdd = (event) => {
         // bai tap 1: check duplicate
-
-        if (newTaskDescription !== "") {
-            const newTask = {
-                done: false,
-                description: newTaskDescription
-            };
-
-            const newTaskList = [newTask, ...tasks];
-            setTasks(newTaskList);
-            setNewTaskDescription("");
-            setError("");
-        } else {
-            setError("Task cannot be empty");
-        }
+        setError("");
+        if (newTaskDescription === "") {
+                 setError("Task cannot be empty");
+         } else {
+             tasks.map((task, index) => {
+                 if (newTaskDescription === task) {
+                     setError("Task cannot be duplicate");
+                 }
+             })
+         }
+         if (error === "" || error === undefined) {
+             const newTask = {
+                 done: false,
+                 description: newTaskDescription
+             };
+             const newTaskList = [newTask, ...tasks];
+             setTasks(newTaskList);
+             setNewTaskDescription("");
+         }
     };
 
     const removeTask = (indexToBeDeleted) => {
@@ -78,8 +83,11 @@ function App() {
         return task.description
     }
 
-    const handleCheckboxOnChange = (event, index) => {
+    const handleCheckboxOnChange = (event, indexToBeDone) => {
         // bai tap 2
+
+
+
     }
 
     return (
