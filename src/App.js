@@ -9,6 +9,7 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [newTaskDescription, setNewTaskDescription] = useState("");
     const [error, setError] = useState();
+    const [counter, setCounter] = useState(0);
 
     const handleChangeNewTask = (event) => {
         const value = event.target.value;
@@ -16,18 +17,25 @@ function App() {
     };
 
     const handleClickAdd = (event) => {
+
+        setCounter(prev=>prev * 2 +1);
         // bai tap 1: check duplicate
-        setError("");
+        // asynchronous vs synchronous
+        let e = "";
+        console.log("L23: ", e);
         if (newTaskDescription === "") {
-                 setError("Task cannot be empty");
+            e = "Task cannot be empty";
+            console.log("L26: ", e);
          } else {
-             tasks.map((task, index) => {
-                 if (newTaskDescription === task) {
-                     setError("Task cannot be duplicate");
-                 }
-             })
+            for(let i=0;i<tasks.length;i++){
+                if (tasks[i].description === newTaskDescription){
+                    e = "Task cannot be duplicate";
+                    break;
+                }
+            }
          }
-         if (error === "" || error === undefined) {
+         console.log("L35: ", e);
+         if (e === "") {
              const newTask = {
                  done: false,
                  description: newTaskDescription
@@ -36,6 +44,8 @@ function App() {
              setTasks(newTaskList);
              setNewTaskDescription("");
          }
+
+         setError(error);
     };
 
     const removeTask = (indexToBeDeleted) => {
@@ -85,9 +95,8 @@ function App() {
 
     const handleCheckboxOnChange = (event, indexToBeDone) => {
         // bai tap 2
-
-
-
+        console.log(event);
+        const checked = event.target.checked;
     }
 
     return (
@@ -96,7 +105,7 @@ function App() {
             <div>
                 <span>Please enter your task:</span>
                 <input value={newTaskDescription} onChange={handleChangeNewTask}/>
-                <button onClick={handleClickAdd}>Add</button>
+                <button onClick={handleClickAdd}>Add {counter}</button>
                 <div style={errorStyle}>{error}</div>
             </div>
 
