@@ -8,7 +8,7 @@ function App() {
     // Local State management => redux (global state)
     const [tasks, setTasks] = useState([]);
     const [newTaskDescription, setNewTaskDescription] = useState("");
-    const [error, setError] = useState();
+    const [error, setError] = useState("");
 
     const handleChangeNewTask = (event) => {
         const value = event.target.value;
@@ -17,25 +17,8 @@ function App() {
 
     const handleClickAdd = (event) => {
         // bai tap 1: check duplicate
-        for(var i = 0;i<tasks.length;i++)
+        if (newTaskDescription !== "")
         {
-            if(newTaskDescription !== tasks[i].description || newTaskDescription !== "")
-            {
-                const newTask1 = {
-                    done: false,
-                    description: newTaskDescription
-                };
-
-                const newTaskList1 = [newTask1,...tasks];
-                setTasks(newTaskList1);
-                setNewTaskDescription("");
-                setError("");
-            } else{
-                setError("You have created");
-            }
-        }
-
-        /*if (newTaskDescription !== "") {
             const newTask = {
                 done: false,
                 description: newTaskDescription
@@ -45,9 +28,11 @@ function App() {
             setTasks(newTaskList);
             setNewTaskDescription("");
             setError("");
+
         } else {
             setError("Task cannot be empty");
-        }*/
+        }
+
     };
 
     const removeTask = (indexToBeDeleted) => {
