@@ -17,17 +17,17 @@ function App() {
 
     const handleClickAdd = (event) => {
         // bai tap 1: check duplicate
-        setError("");
+        let e="";
         if (newTaskDescription === "") {
-                 setError("Task cannot be empty");
+                 e="Task cannot be empty";
          } else {
-             tasks.map((task, index) => {
-                 if (newTaskDescription === task) {
-                     setError("Task cannot be duplicate");
+             for(let index =0;index<tasks.length;index++){
+                 if (newTaskDescription === tasks[index].description) {
+                     e="Task cannot be duplicate";
                  }
-             })
+             }
          }
-         if (error === "" || error === undefined) {
+         if (e === "") {
              const newTask = {
                  done: false,
                  description: newTaskDescription
@@ -36,6 +36,7 @@ function App() {
              setTasks(newTaskList);
              setNewTaskDescription("");
          }
+         setError(e);
     };
 
     const removeTask = (indexToBeDeleted) => {
@@ -85,7 +86,16 @@ function App() {
 
     const handleCheckboxOnChange = (event, indexToBeDone) => {
         // bai tap 2
-
+        const checked = event.target.value;
+        for(let index=0;index<tasks.length;index++){
+            if(indexToBeDone === index){
+                if (checked === "on"){
+                    tasks[index].done = true;
+                } else {
+                    tasks[index].done = false;
+                }
+            }
+        }
 
 
     }
@@ -105,14 +115,13 @@ function App() {
                 <ol>
                     {tasks.map((task, index) => (
                         <li>
-                            <input type={"checkbox"} checked={task.done}
-                                   onChange={event => handleCheckboxOnChange(event, index)}/>
-                            {renderTask(task)}
-                            <button onClick={event => removeTask(index)}>Remove</button>
                             {
-                                task.done ? <button onClick={event => markTaskAsUndone(index)}>Mark as undone</button>
-                                    : <button onClick={event => markTaskAsDone(index)}>Mark as done</button>
+                                task.done ? <input type={"checkbox"} onClick={event => markTaskAsUndone(index)}></input>
+                                    : <input type={"checkbox"} onClick={event => markTaskAsDone(index)}></input>
                             }
+                            <span style={{margin:'10px'}} >{renderTask(task)}</span>
+                            <button onClick={event => removeTask(index)}>Remove</button>
+
                         </li>
                     ))}
                 </ol>
