@@ -1,5 +1,10 @@
 import React, {useState} from 'react';
 import './App.css';
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
+// import DeleteIcon from '@material-ui/icons/Delete';
+// import IconButton from "@material-ui/core/IconButton";
+// import {makeStyles} from "@material-ui/core/styles";
 
 const errorStyle = {color: "red"};
 
@@ -9,7 +14,12 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [newTaskDescription, setNewTaskDescription] = useState("");
     const [error, setError] = useState();
+    const [date, setDate] = useState(new Date());
+    const [dates, setDates] = useState([]);
 
+    const onChange = (date) => {
+        setDate(date);
+    };
     const handleChangeNewTask = (event) => {
         const value = event.target.value;
         setNewTaskDescription(value);
@@ -34,6 +44,11 @@ function App() {
              };
              const newTaskList = [newTask, ...tasks];
              setTasks(newTaskList);
+             const dateTask = {
+                 date: date,
+                 taskList : newTaskList
+             }
+             setDates(dateTask);
              setNewTaskDescription("");
          }
          setError(e);
@@ -84,58 +99,67 @@ function App() {
         return task.description
     }
 
-    const handleCheckboxOnChange = (event, indexToBeDone) => {
+    const handleCheckboxOnChange = (indexToBeUndone) => {
         // bai tap 2
-        const checked = event.target.value;
-        for(let index=0;index<tasks.length;index++){
-            if(indexToBeDone === index){
-                if (checked === "on"){
-                    tasks[index].done = true;
-                } else {
-                    tasks[index].done = false;
+        const newTaskList = tasks.map((task, index) => {
+            if (index === indexToBeUndone) {
+                return {
+                    ...task,
+                    done: !task.done,
                 }
+            } else {
+                return task;
             }
-        }
-
-
+        })
+        setTasks(newTaskList);
     }
+    // const useStyles = makeStyles((theme) => ({
+    //     button: {
+    //         margin: theme.spacing(1),
+    //     },
+    // }));
+    // let classes = useStyles();
+        return (
+            <>
+                {/*{classes = useStyles()}*/}
+                <h2>Welcome to my todo list</h2>
+                <div>
+                    <span>Please enter your task:</span>
+                    <input value={newTaskDescription} onChange={handleChangeNewTask}/>
+                    <button onClick={handleClickAdd}>Add</button>
+                    <div style={errorStyle}>{error}</div>
+                </div>
 
-    return (
-        <>
-            <h2>Welcome to my todo list</h2>
-            <div>
-                <span>Please enter your task:</span>
-                <input value={newTaskDescription} onChange={handleChangeNewTask}/>
-                <button onClick={handleClickAdd}>Add</button>
-                <div style={errorStyle}>{error}</div>
-            </div>
-
-            <div>
-                <strong>Task list:</strong>
-                <ol>
+                <div>
+                    <strong>Task list:</strong>
                     {tasks.map((task, index) => (
                         <li>
-                            {
-                                task.done ? <input type={"checkbox"} onClick={event => markTaskAsUndone(index)}></input>
-                                    : <input type={"checkbox"} onClick={event => markTaskAsDone(index)}></input>
-                            }
-                            <span style={{margin:'10px'}} >{renderTask(task)}</span>
+                            <input type={"checkbox"} checked={task.done}
+                                   onChange={event => handleCheckboxOnChange(index)}/>
+                            <span style={{margin: '10px'}}>{renderTask(task)}</span>
                             <button onClick={event => removeTask(index)}>Remove</button>
-
+                            {/*<IconButton aria-label="delete">*/}
+                            {/*    <DeleteIcon/>*/}
+                            {/*</IconButton>*/}
                         </li>
-                    ))}
-                </ol>
+                    ))
+                    }
+                    <div>
+                        <Calendar
+                            onChange={onChange}
+                            value={date}
+                        />
+                    </div>
+                    <hr/>
+                    <block>
+                        Total: {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+                    </block>
+                </div>
 
-                <hr/>
+                <h3>Copyright &copy; 2020 mytodo </h3>
 
-                <block>
-                    Total: {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
-                </block>
-            </div>
-
-            <h3>Copyright &copy; 2020 mytodo </h3>
-        </>
-    );
-}
+            </>
+        );
+    }
 
 export default App;
