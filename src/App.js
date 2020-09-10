@@ -14,11 +14,13 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [newTaskDescription, setNewTaskDescription] = useState("");
     const [error, setError] = useState();
-    const [date, setDate] = useState(new Date());
-    const [dates, setDates] = useState([]);
+    const [selectedDate, setselectedDate] = useState(new Date());
+    // const [dateTask, setdateTask] = useState(tasks.filter(task => task.date === selectedDate));
+    const [dateTask, setdateTask] = useState([]);
+
 
     const onChange = (date) => {
-        setDate(date);
+        setselectedDate(date);
     };
     const handleChangeNewTask = (event) => {
         const value = event.target.value;
@@ -39,16 +41,12 @@ function App() {
          }
          if (e === "") {
              const newTask = {
+                 date: selectedDate,
                  done: false,
                  description: newTaskDescription
              };
              const newTaskList = [newTask, ...tasks];
              setTasks(newTaskList);
-             const dateTask = {
-                 date: date,
-                 taskList : newTaskList
-             }
-             setDates(dateTask);
              setNewTaskDescription("");
          }
          setError(e);
@@ -57,6 +55,10 @@ function App() {
     const removeTask = (indexToBeDeleted) => {
         const newTaskList = tasks.filter((x, index) => index !== indexToBeDeleted);
         setTasks(newTaskList);
+    };
+    const fiter = (selectedDate) => {
+        const  tempTask = tasks.filter(task => task.date === selectedDate);
+        setdateTask(tempTask);
     };
 
     const markTaskAsDone = (indexToBeDone) => {
@@ -99,6 +101,7 @@ function App() {
         return task.description
     }
 
+
     const handleCheckboxOnChange = (indexToBeUndone) => {
         // bai tap 2
         const newTaskList = tasks.map((task, index) => {
@@ -132,7 +135,8 @@ function App() {
 
                 <div>
                     <strong>Task list:</strong>
-                    {tasks.map((task, index) => (
+                    {fiter(selectedDate)}
+                    {dateTask.map((task, index) => (
                         <li>
                             <input type={"checkbox"} checked={task.done}
                                    onChange={event => handleCheckboxOnChange(index)}/>
@@ -147,7 +151,7 @@ function App() {
                     <div>
                         <Calendar
                             onChange={onChange}
-                            value={date}
+                            value={selectedDate}
                         />
                     </div>
                     <hr/>
