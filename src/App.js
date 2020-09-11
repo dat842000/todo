@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import './App.css';
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import IconButton from "@material-ui/core/IconButton";
-// import {makeStyles} from "@material-ui/core/styles";
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from "@material-ui/core/IconButton";
+import {makeStyles} from "@material-ui/core/styles";
 
 const errorStyle = {color: "red"};
 function formatDate(d){
@@ -34,8 +34,8 @@ function App() {
       e = "Task cannot be empty";
     }
     else {
-      for (let index = 0; index < tasks.length; index++) {
-        if (newTaskDescription === tasks[index].description) {
+      for (let index = 0; index < displayedTodos.length; index++) {
+        if (newTaskDescription === displayedTodos[index].description) {
           e = "Task cannot be duplicate";
         }
       }
@@ -53,8 +53,8 @@ function App() {
     setError(e);
   };
 
-  const removeTask = (indexToBeDeleted) => {
-    const newTaskList = tasks.filter((x, index) => index !== indexToBeDeleted);
+  const removeTask = (taskRemove) => {
+    const newTaskList = tasks.filter(task => formatDate(task.date) !== formatDate(taskRemove.date) && task.description === taskRemove.description );
     setTasks(newTaskList);
   };
   // @anhquan: khong dung nhu the nay
@@ -68,38 +68,6 @@ function App() {
 
   const howManyTodosOnDate = date => {
       return tasks.filter(task => formatDate(task.date) === formatDate(date)).length
-  }
-
-  const markTaskAsDone = (indexToBeDone) => {
-    const newTaskList = tasks.map((task, index) => {
-      if (index === indexToBeDone) {
-        return {
-          ...task,
-          done: true
-        }
-      }
-      else {
-        return task;
-      }
-    })
-
-    setTasks(newTaskList);
-  }
-
-  const markTaskAsUndone = (indexToBeUndone) => {
-    const newTaskList = tasks.map((task, index) => {
-      if (index === indexToBeUndone) {
-        return {
-          ...task,
-          done: false
-        }
-      }
-      else {
-        return task;
-      }
-    })
-
-    setTasks(newTaskList);
   }
 
   const renderTask = (task) => {
@@ -127,12 +95,6 @@ function App() {
     })
     setTasks(newTaskList);
   }
-  // const useStyles = makeStyles((theme) => ({
-  //     button: {
-  //         margin: theme.spacing(1),
-  //     },
-  // }));
-  // let classes = useStyles();
   return (
     <>
       {/*{classes = useStyles()}*/}
@@ -144,45 +106,44 @@ function App() {
           <button onClick={handleClickAdd}>Add</button>
           <div style={errorStyle}>{error}</div>
         </div>
+      </div>
+      <div style={{display:'flex' , margin: '15px'} }>
+          <div style={{marginRight: '35px'}}>
+              <strong>Task of date {formatDate(selectedDate)}</strong>
+              {/* @anhquan: ko dung filter o day nhu the nay duoc */}
+              {/* {fiter(selectedDate)} */}
+              {displayedTodos.map((task, index) => (
+                  <li>
+                      <input type={"checkbox"} checked={task.done}
+                             onChange={event => handleCheckboxOnChange(index)}/>
+                      <span style={{margin: '10px'}}>{renderTask(task)}</span>
+                      <button onClick={event => removeTask(task)}>Remove</button>
+                  </li>
+              ))
+              }
+
+          </div>
         <div>
             <div>
                 The selected date is : {new Intl.DateTimeFormat('en', { weekday: "long", year: 'numeric', month: "numeric", day: "numeric" }).format(selectedDate)}
             </div>
-          <Calendar
-            onChange={onCalendarChange}
-            value={selectedDate}
-            tileContent={({ activeStartDate, date, view }) => {
-                const counter = howManyTodosOnDate(date);
-                if (counter>0){
-                    return ` (${counter})`;
-                }
-            }}
-          />
+            <Calendar
+                onChange={onCalendarChange}
+                value={selectedDate}
+                tileContent={({ activeStartDate, date, view }) => {
+                    const counter = howManyTodosOnDate(date);
+                    if (counter>0){
+                        return ` (${counter})`;
+                    }
+                }}
+            />
         </div>
       </div>
-
-
-      <div>
-        <strong>Task of date {formatDate(selectedDate)}</strong>
-        {/* @anhquan: ko dung filter o day nhu the nay duoc */}
-        {/* {fiter(selectedDate)} */}
-        {displayedTodos.map((task, index) => (
-          <li>
-            <input type={"checkbox"} checked={task.done}
-                   onChange={event => handleCheckboxOnChange(index)}/>
-            <span style={{margin: '10px'}}>{renderTask(task)}</span>
-            <button onClick={event => removeTask(index)}>Remove</button>
-            {/*<IconButton aria-label="delete">*/}
-            {/*    <DeleteIcon/>*/}
-            {/*</IconButton>*/}
-          </li>
-        ))
-        }
         <hr/>
         <block>
           Total: {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
         </block>
-      </div>
+
 
       <h3>Copyright &copy; 2020 mytodo </h3>
 
