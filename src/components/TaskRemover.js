@@ -1,11 +1,15 @@
 import React from 'react';
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function TaskRemover({task, onTaskRemove}) {
 
-
     return (
-        <Button onClick={event => onTaskRemove(task)}>Remove</Button>
+        <IconButton onClick={event => onTaskRemove(task)}
+                    title={"Remove task"}
+        >
+            <DeleteIcon fontSize={"small"}/>
+        </IconButton>
     );
 }
 

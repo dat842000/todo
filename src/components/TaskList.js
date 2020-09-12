@@ -18,10 +18,10 @@ function TaskList({
         setTasks(newTaskList);
     };
 
-    const handleStatusChange = (event, taskIndex) => {
+    const onStatusChange = (event, taskToChange) => {
         // bai tap 2
-        const newTaskList = tasks.map((task, index) => {
-            if (index === taskIndex) {
+        const newTaskList = tasks.map((task) => {
+            if (task.id === taskToChange.id) {
                 return {
                     ...task,
                     done: event.target.checked,
@@ -40,7 +40,7 @@ function TaskList({
                     <strong>Task of date {formatDate(selectedDate)}</strong>
                     {displayedTodos.map((task, index) => (
                         <li key={index}>
-                            <TaskStatus task={task} onStatusChange={handleStatusChange}/>
+                            <TaskStatus task={task} onStatusChange={onStatusChange}/>
                             <TaskRender task={task}/>
                             <TaskRemover task={task} onTaskRemove={onTaskRemove}/>
                         </li>

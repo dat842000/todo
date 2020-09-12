@@ -1,14 +1,15 @@
 import React from 'react';
+import TaskDescription from "./TaskDescription";
 
 function TaskRender({task}) {
 
     const renderTask = (task) => {
         if (task.done) {
             return (
-                <del>{task.description}</del>
+                <del><TaskDescription task={task}/></del>
             )
         }
-        return task.description
+        return <TaskDescription task={task}/>
     };
 
     return (

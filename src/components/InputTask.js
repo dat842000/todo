@@ -2,7 +2,17 @@ import React, {useState} from 'react';
 import {FormControlLabel} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
+const {v4: uuidv4} = require('uuid');
+
 const errorStyle = {color: "red"};
+
+const createNewTask = ({description, date}) =>
+    ({
+        id: uuidv4(),
+        date,
+        done: false,
+        description
+    });
 
 function InputTask({
                        selectedDate,
@@ -19,7 +29,6 @@ function InputTask({
     };
 
     const handleClickAdd = (event) => {
-        // bai tap 1: check duplicate
         let e = "";
         if (newTaskDescription === "") {
             e = "Task cannot be empty";
@@ -30,12 +39,9 @@ function InputTask({
                 }
             }
         }
+
         if (e === "") {
-            const newTask = {
-                date: selectedDate,
-                done: false,
-                description: newTaskDescription
-            };
+            const newTask = createNewTask({description: newTaskDescription, date: selectedDate});
             const newTaskList = [newTask, ...tasks];
             setTasks(newTaskList);
             setNewTaskDescription("");
