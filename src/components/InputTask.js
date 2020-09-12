@@ -6,6 +6,13 @@ const {v4: uuidv4} = require('uuid');
 
 const errorStyle = {color: "red"};
 
+// Bai tap 2:
+// - them priority (DANGER, WARNING, NORMAL, LOW) vao cau truc cua task
+// - thay doi <TaskDescription> :
+//      DANGER : red
+//      WARNING: yellow
+//      NORMAL: mau mac dinh
+//      LOW: grey
 const createNewTask = ({description, date}) =>
     ({
         id: uuidv4(),

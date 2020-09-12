@@ -33,6 +33,7 @@ function TaskList({
         setTasks(newTaskList);
     };
 
+    // Bai tap 1: Thay Task List bang <Table> cua material-ui
     return (
         <>
             <div style={{display: 'flex', margin: '15px'}}>
