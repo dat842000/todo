@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {FormControlLabel} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import {classes} from "istanbul-lib-coverage";
 
 const {v4: uuidv4} = require('uuid');
 
@@ -26,7 +28,8 @@ function InputTask({
                        tasks,
                        error,
                        setTasks,
-                       setError
+                       setError,
+                       displayedTodos
                    }) {
     const [newTaskDescription, setNewTaskDescription] = useState("");
 
@@ -40,8 +43,8 @@ function InputTask({
         if (newTaskDescription === "") {
             e = "Task cannot be empty";
         } else {
-            for (let index = 0; index < tasks.length; index++) {
-                if (newTaskDescription === tasks[index].description) {
+            for (let index = 0; index < displayedTodos.length; index++) {
+                if (newTaskDescription === displayedTodos[index].description) {
                     e = "Task cannot be duplicate";
                 }
             }
@@ -59,13 +62,16 @@ function InputTask({
     return (
         <div style={{display: 'flex'}}>
             <div style={{marginRight: 24}}>
-                <FormControlLabel control={<input value={newTaskDescription}
-                                                  onChange={handleChangeNewTask}/>}
-                                  label={"Please enter your task:"}
-                                  labelPlacement={"start"}
-                />
-
-                <Button onClick={handleClickAdd}>Add</Button>
+                <TextField id="standard-basic"
+                           label="Your task"
+                           value={newTaskDescription}
+                           onChange={handleChangeNewTask} />
+                <Button onClick={handleClickAdd}
+                        variant="contained"
+                        color="primary"
+                        size={"small"}
+                        style={{margin: "15px"}}
+                >Add</Button>
                 <div style={errorStyle}>{error}</div>
             </div>
         </div>

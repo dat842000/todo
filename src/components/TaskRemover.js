@@ -7,6 +7,7 @@ function TaskRemover({task, onTaskRemove}) {
     return (
         <IconButton onClick={event => onTaskRemove(task)}
                     title={"Remove task"}
+                    color="primary"
         >
             <DeleteIcon fontSize={"small"}/>
         </IconButton>

@@ -1,11 +1,17 @@
 import React from 'react';
+import Checkbox from "@material-ui/core/Checkbox";
 
 function TaskStatus({task, onStatusChange}) {
     return (
-        <input type={"checkbox"} checked={task.done}
-               onChange={event => {
-                   onStatusChange(event, task)
-               }}/>
+
+        <Checkbox
+            checked={task.done}
+            color="primary"
+            inputProps={{'aria-label': 'secondary checkbox'}}
+            onChange={event => {
+                onStatusChange(event, task)
+            }}
+        />
     );
 }
 

@@ -6,6 +6,7 @@ import AppHeader from "./components/AppHeader";
 import InputTask from "./components/InputTask";
 import TaskList from "./components/TaskList";
 import SelectDate from "./components/SelectDate";
+import formatDate from "./utils/formatDate";
 
 function App() {
     const [tasks, setTasks] = useState([]);
@@ -15,6 +16,7 @@ function App() {
     const onCalendarChange = (date) => {
         setSelectedDate(date);
     };
+    const displayedTodos = tasks.filter(task => formatDate(task.date) === formatDate(selectedDate));
 
     return (
         <>
@@ -25,6 +27,7 @@ function App() {
                        selectedDate={selectedDate}
                        setError={setError}
                        setTasks={setTasks}
+                       displayedTodos={displayedTodos}
             />
 
             <SelectDate selectedDate={selectedDate}
@@ -34,6 +37,7 @@ function App() {
 
             <TaskList
                 selectedDate={selectedDate}
+                displayedTodos={displayedTodos}
                 tasks={tasks}
                 setTasks={setTasks}
             />

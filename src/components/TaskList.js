@@ -7,14 +7,15 @@ import TaskRemover from "./TaskRemover";
 
 function TaskList({
                       selectedDate,
+                      displayedTodos,
                       tasks,
                       setTasks
                   }) {
 
-    const displayedTodos = tasks.filter(task => formatDate(task.date) === formatDate(selectedDate));
+
 
     const onTaskRemove = (taskRemove) => {
-        const newTaskList = tasks.filter(task => formatDate(task.date) !== formatDate(taskRemove.date) && task.description === taskRemove.description);
+        const newTaskList = tasks.filter(task => taskRemove.id !== task.id);
         setTasks(newTaskList);
     };
 
