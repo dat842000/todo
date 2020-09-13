@@ -68,7 +68,7 @@ function InputTask({
                            onChange={handleChangeNewTask} />
                 <Button onClick={handleClickAdd}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         size={"small"}
                         style={{margin: "15px"}}
                 >Add</Button>
