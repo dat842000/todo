@@ -6,6 +6,7 @@ function TaskStatus({task, onStatusChange}) {
 
         <Checkbox
             checked={task.done}
+            title={task.done ? "UnDone" : "Done"}
             color="primary"
             inputProps={{'aria-label': 'secondary checkbox'}}
             onChange={event => {

@@ -12,6 +12,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import TaskStatus from "./TaskStatus";
 import TaskRemover from "./TaskRemover";
 import TaskRender from "./TaskRender";
+import TaskLevel from  "./TaskLevel";
 
 function TaskList({
                       selectedDate,
@@ -58,7 +59,7 @@ function TaskList({
     };
     const useStyles = makeStyles({
         table: {
-            minWidth: 400,
+            minWidth: 600,
         },
     });
 
@@ -75,15 +76,19 @@ function TaskList({
                             <TableHead>
                                 <StyledTableRow>
                                     <StyledTableCell>Task</StyledTableCell>
+                                    <StyledTableCell align="right">Important</StyledTableCell>
                                     <StyledTableCell align="right">Check</StyledTableCell>
                                     <StyledTableCell align="right">Delete</StyledTableCell>
                                 </StyledTableRow>
                             </TableHead>
                             <TableBody>
                                 {displayedTodos.map((task, index) => (
-                                    <StyledTableRow key={task.description}>
+                                    <StyledTableRow key={index}>
                                         <StyledTableCell component="th" scope="row">
                                             <TaskRender task={task}/>
+                                        </StyledTableCell>
+                                        <StyledTableCell align={"right"}>
+                                            <TaskLevel task={task}/>
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
                                             <TaskStatus task={task} onStatusChange={onStatusChange}/>
@@ -96,6 +101,7 @@ function TaskList({
                             </TableBody>
                         </Table>
                     </TableContainer>
+
 
 
                 </div>
