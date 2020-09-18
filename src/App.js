@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import './App.css';
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
+import {useDispatch, useSelector} from "react-redux";
+import {getTasks} from "./reducers/selectors";
 // import DeleteIcon from '@material-ui/icons/Delete';
 // import IconButton from "@material-ui/core/IconButton";
 // import {makeStyles} from "@material-ui/core/styles";
@@ -13,10 +15,15 @@ function formatDate(d){
 function App() {
 
   // Local State management => redux (global state)
-  const [tasks, setTasks] = useState([]);
+  const tasks = useSelector(getTasks);
+  const dispatch = useDispatch();
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [error, setError] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const setTasks = (tasks)=>{
+    dispatch({type:"SET_TASKS", payload: tasks})
+  }
 
   const onCalendarChange = (date) => {
     setSelectedDate(date);
@@ -28,7 +35,6 @@ function App() {
   };
 
   const handleClickAdd = (event) => {
-    // bai tap 1: check duplicate
     let e = "";
     if (newTaskDescription === "") {
       e = "Task cannot be empty";
@@ -57,13 +63,6 @@ function App() {
     const newTaskList = tasks.filter((x, index) => index !== indexToBeDeleted);
     setTasks(newTaskList);
   };
-  // @anhquan: khong dung nhu the nay
-  // const fiter = (selectedDate) => {
-  //     const  tempTask = tasks.filter(task => task.date === selectedDate);
-  //     setdateTask(tempTask);
-  // };
-
-  // @anhquan: ma phai filter cai tasks, de tao ra mot array moi
   const displayedTodos = tasks.filter(task => formatDate(task.date) === formatDate(selectedDate));
 
   const howManyTodosOnDate = date => {
@@ -127,12 +126,6 @@ function App() {
     })
     setTasks(newTaskList);
   }
-  // const useStyles = makeStyles((theme) => ({
-  //     button: {
-  //         margin: theme.spacing(1),
-  //     },
-  // }));
-  // let classes = useStyles();
   return (
     <>
       {/*{classes = useStyles()}*/}
