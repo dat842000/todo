@@ -5,7 +5,7 @@ import {createSelector, createSlice} from "@reduxjs/toolkit";
 const initialState = {
     tasks: [],
     error: null,
-    selectedDate: null,
+    selectedDate: new Date(),
     loading: false,
     searchText: ""
 };

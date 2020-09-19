@@ -67,11 +67,13 @@ function App() {
 
             <div style={{display: "flex", flexDirection: "row"}}>
                 <div style={{flex: 1}}>
+                    {displayedTasks.length > 0 &&
                     <TaskList
                         setSelectedDate={setSelectedDate}
                         selectedDate={selectedDate}
                         displayedTodos={displayedTasks}
-                    />
+                    />}
+
                 </div>
                 <div style={{flex: 1}}>
                     <SelectDate selectedDate={selectedDate}
