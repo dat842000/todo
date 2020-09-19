@@ -1930,6 +1930,11 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
+"@wojtekmaj/date-utils@^1.0.0":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@wojtekmaj/date-utils/-/date-utils-1.0.3.tgz#2dcfd92881425c5923e429c2aec86fb3609032a1"
+  integrity sha512-1VPkkTBk07gMR1fjpBtse4G+oJqpmE+0gUFB0dg3VIL7qJmUVaBoD/vlzMm/jNeOPfvlmerl1lpnsZyBUFIRuw==
+
 "@wojtekmaj/date-utils@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@wojtekmaj/date-utils/-/date-utils-1.0.2.tgz#31348c572606ac42aaf9b7bb22074fc0b163cc2b"
@@ -8788,6 +8793,15 @@ react-calendar@^3.1.0:
   dependencies:
     "@wojtekmaj/date-utils" "^1.0.2"
     get-user-locale "^1.2.0"
+    merge-class-names "^1.1.1"
+    prop-types "^15.6.0"
+
+react-clock@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-clock/-/react-clock-3.0.0.tgz#0d29f8e682ef516574061d1d24b1a286cb2da89b"
+  integrity sha512-D3K82D3YGcDtzxZCfiACLcDTL8cJXSgpdrzTY9ff3H5vflxlLzTSLF8apZRo6JZzOFrZQvw5mrS7TkQzj9nG0A==
+  dependencies:
+    "@wojtekmaj/date-utils" "^1.0.0"
     merge-class-names "^1.1.1"
     prop-types "^15.6.0"
 

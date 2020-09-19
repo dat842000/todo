@@ -13,6 +13,7 @@ import TaskStatus from "./TaskStatus";
 import TaskRemover from "./TaskRemover";
 import TaskRender from "./TaskRender";
 import TaskLevel from  "./TaskLevel";
+import TablePagination from "@material-ui/core/TablePagination";
 
 function TaskList({
                       selectedDate,
@@ -20,6 +21,10 @@ function TaskList({
                       tasks,
                       setTasks
                   }) {
+
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
     const StyledTableCell = withStyles((theme) => ({
         head: {
             backgroundColor: theme.palette.common.black,
@@ -57,9 +62,17 @@ function TaskList({
         });
         setTasks(newTaskList);
     };
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
     const useStyles = makeStyles({
         table: {
-            minWidth: 600,
+            minWidth: 700,
         },
     });
 
@@ -70,25 +83,32 @@ function TaskList({
         <>
             <div style={{display: 'flex', margin: '15px'}}>
                 <div style={{marginRight: '35px'}}>
+                    <div style={{marginBottom :"20px"}}>
                     <strong>Task of date {formatDate(selectedDate)}</strong>
+                    </div>
                     <TableContainer component={Paper}>
                         <Table className={classes.table} aria-label="customized table">
                             <TableHead>
                                 <StyledTableRow>
                                     <StyledTableCell>Task</StyledTableCell>
                                     <StyledTableCell align="right">Important</StyledTableCell>
+                                    <StyledTableCell align="right">Date Create</StyledTableCell>
                                     <StyledTableCell align="right">Check</StyledTableCell>
                                     <StyledTableCell align="right">Delete</StyledTableCell>
                                 </StyledTableRow>
                             </TableHead>
                             <TableBody>
-                                {displayedTodos.map((task, index) => (
+                                {displayedTodos
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((task, index) => (
                                     <StyledTableRow key={index}>
                                         <StyledTableCell component="th" scope="row">
                                             <TaskRender task={task}/>
                                         </StyledTableCell>
                                         <StyledTableCell align={"right"}>
                                             <TaskLevel task={task}/>
+                                        </StyledTableCell>
+                                        <StyledTableCell align={"right"}>
+                                            <strong>{formatDate(task.date)}</strong>
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
                                             <TaskStatus task={task} onStatusChange={onStatusChange}/>
@@ -100,6 +120,15 @@ function TaskList({
                                 ))}
                             </TableBody>
                         </Table>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={displayedTodos.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
                     </TableContainer>
 
 

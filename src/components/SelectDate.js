@@ -1,12 +1,14 @@
 import React from 'react';
 import Calendar from "react-calendar";
 import formatDate from "../utils/formatDate";
+import Button from "@material-ui/core/Button";
 
-function SelectDate({selectedDate, onCalendarChange, tasks}) {
+function SelectDate({selectedDate, onCalendarChange, tasks, handleBackToNow}) {
 
     const howManyTodosOnDate = date => {
         return tasks.filter(task => formatDate(task.date) === formatDate(date)).length
     };
+
 
     return (
         <div>
@@ -17,6 +19,12 @@ function SelectDate({selectedDate, onCalendarChange, tasks}) {
                 month: "numeric",
                 day: "numeric"
             }).format(selectedDate)}
+                <Button onClick={handleBackToNow}
+                        variant="contained"
+                        color="secondary"
+                        size={"small"}
+                        style={{margin: "15px"}}
+                >Back to now</Button>
             </div>
             <Calendar
                 onChange={onCalendarChange}

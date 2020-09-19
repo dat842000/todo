@@ -12,15 +12,35 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [search,setSearch] = useState("");
+
+    // nut search chua hay
+
+    const handelSearch = (event) =>{
+        const input = event.target.value;
+        setSearch(input);
+        setSelectedDate(null);
+    }
 
     const onCalendarChange = (date) => {
         setSelectedDate(date);
+        setSearch("");
     };
-    const displayedTodos = tasks.filter(task => formatDate(task.date) === formatDate(selectedDate));
+    const displayedTodos = tasks.filter(task => formatDate(task.date) === formatDate(selectedDate) || search === task.description );
+
+    const handleBackToNow = () => {
+        const date = new Date();
+        setSelectedDate(date);
+        setSearch("");
+    };
+
+
 
     return (
         <>
-            <AppHeader/>
+            <AppHeader handelSearch={handelSearch}
+                       search={search}
+            />
 
             <InputTask error={error}
                        tasks={tasks}
@@ -32,10 +52,12 @@ function App() {
 
             <SelectDate selectedDate={selectedDate}
                         onCalendarChange={onCalendarChange}
+                        handleBackToNow={handleBackToNow}
                         tasks={tasks}
             />
 
             <TaskList
+                setSelectedDate={setSelectedDate}
                 selectedDate={selectedDate}
                 displayedTodos={displayedTodos}
                 tasks={tasks}
