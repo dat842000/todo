@@ -7,6 +7,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import green from "@material-ui/core/colors/green";
 import grey from "@material-ui/core/colors/grey";
 import {red, yellow} from "@material-ui/core/colors";
+import {useDispatch} from "react-redux";
 
 const {v4: uuidv4} = require('uuid');
 
@@ -68,18 +69,24 @@ const GreyCheckbox = withStyles({
 
 function InputTask({
                        selectedDate,
-                       tasks,
                        error,
-                       setTasks,
                        setError,
                        displayedTodos
                    }) {
     const [newTaskDescription, setNewTaskDescription] = useState("");
-    const [selectedValue, setSelectedValue] = useState("Danger");
+    const [newTaskPriority, setNewTaskPriority] = useState("Danger");
+    const dispatch = useDispatch();
+    const addTask = newTask => {
+        const myAction = {
+            type: "ADD_TASK",
+            payload: newTask
+        };
+        dispatch(myAction);
+    };
 
     const handleChange = (event) => {
         const value = event.target.value;
-        setSelectedValue(value);
+        setNewTaskPriority(value);
     };
 
     const handleChangeNewTask = (event) => {
@@ -100,9 +107,12 @@ function InputTask({
         }
 
         if (e === "") {
-            const newTask = createNewTask({description: newTaskDescription, date: selectedDate, important: selectedValue});
-            const newTaskList = [newTask, ...tasks];
-            setTasks(newTaskList);
+            const newTask = createNewTask({
+                description: newTaskDescription,
+                date: selectedDate,
+                important: newTaskPriority
+            });
+            addTask(newTask);
             setNewTaskDescription("");
         }
         setError(e);
@@ -125,25 +135,25 @@ function InputTask({
                     <FormControlLabel
                         control={<RedCheckbox />}
                         value={"Danger"}
-                        checked={selectedValue === "Danger"}
+                        checked={newTaskPriority === "Danger"}
                         label={"Danger"}
                     />
                     <FormControlLabel
                         control={<YellowCheckbox />}
                         value={"Warning"}
-                        checked={selectedValue === "Warning"}
+                        checked={newTaskPriority === "Warning"}
                         label={"Warning"}
                     />
                     <FormControlLabel
                         control={<GreenCheckbox />}
                         value={"Normal"}
-                        checked={selectedValue === "Normal"}
+                        checked={newTaskPriority === "Normal"}
                         label={"Normal"}
                     />
                     <FormControlLabel
                         control={<GreyCheckbox />}
                         value={"Low"}
-                        checked={selectedValue === "Low"}
+                        checked={newTaskPriority === "Low"}
                         label={"Low"}
                     />
                 </div>

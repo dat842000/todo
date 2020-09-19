@@ -12,16 +12,17 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import TaskStatus from "./TaskStatus";
 import TaskRemover from "./TaskRemover";
 import TaskRender from "./TaskRender";
-import TaskLevel from  "./TaskLevel";
+import TaskLevel from "./TaskLevel";
 import TablePagination from "@material-ui/core/TablePagination";
+import {useDispatch, useSelector} from "react-redux";
+import {getTasks} from "../reducers/todoReducer";
 
 function TaskList({
                       selectedDate,
-                      displayedTodos,
-                      tasks,
-                      setTasks
+                      displayedTodos
                   }) {
-
+    const dispatch = useDispatch();
+    const tasks = useSelector(getTasks);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -44,23 +45,20 @@ function TaskList({
     }))(TableRow);
 
     const onTaskRemove = (taskRemove) => {
-        const newTaskList = tasks.filter(task => taskRemove.id !== task.id);
-        setTasks(newTaskList);
+        dispatch({
+            type: "REMOVE_TASK",
+            payload: taskRemove
+        })
     };
 
     const onStatusChange = (event, taskToChange) => {
-        // bai tap 2
-        const newTaskList = tasks.map((task) => {
-            if (task.id === taskToChange.id) {
-                return {
-                    ...task,
-                    done: event.target.checked,
-                }
-            } else {
-                return task;
+        dispatch({
+            type: "SET_TASK_STATUS",
+            payload: {
+                taskToChange,
+                newTaskStatus: event.target.checked
             }
-        });
-        setTasks(newTaskList);
+        })
     };
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
