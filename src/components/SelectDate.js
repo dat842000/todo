@@ -9,7 +9,6 @@ function SelectDate({selectedDate, onCalendarChange, tasks, handleBackToNow}) {
         return tasks.filter(task => formatDate(task.date) === formatDate(date)).length
     };
 
-
     return (
         <div>
             <div>

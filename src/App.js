@@ -12,29 +12,27 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [search,setSearch] = useState("");
+    const [search, setSearch] = useState("");
 
     // nut search chua hay
 
-    const handelSearch = (event) =>{
+    const handelSearch = (event) => {
         const input = event.target.value;
         setSearch(input);
-        setSelectedDate(null);
-    }
+    };
 
     const onCalendarChange = (date) => {
         setSelectedDate(date);
-        setSearch("");
     };
-    const displayedTodos = tasks.filter(task => formatDate(task.date) === formatDate(selectedDate) || search === task.description );
+    const displayedTodos = tasks.filter(task => {
+        const searchIsEmpty = search === null || search === undefined || search.length === 0;
+        return formatDate(task.date) === formatDate(selectedDate) && searchIsEmpty ? true : search === task.description
+    });
 
     const handleBackToNow = () => {
         const date = new Date();
         setSelectedDate(date);
-        setSearch("");
     };
-
-
 
     return (
         <>
@@ -50,20 +48,24 @@ function App() {
                        displayedTodos={displayedTodos}
             />
 
-            <SelectDate selectedDate={selectedDate}
-                        onCalendarChange={onCalendarChange}
-                        handleBackToNow={handleBackToNow}
+            <div style={{display: "flex", flexDirection: "row"}}>
+                <div style={{flex: 1}}>
+                    <TaskList
+                        setSelectedDate={setSelectedDate}
+                        selectedDate={selectedDate}
+                        displayedTodos={displayedTodos}
                         tasks={tasks}
-            />
-
-            <TaskList
-                setSelectedDate={setSelectedDate}
-                selectedDate={selectedDate}
-                displayedTodos={displayedTodos}
-                tasks={tasks}
-                setTasks={setTasks}
-            />
-
+                        setTasks={setTasks}
+                    />
+                </div>
+                <div style={{flex: 1}}>
+                    <SelectDate selectedDate={selectedDate}
+                                onCalendarChange={onCalendarChange}
+                                handleBackToNow={handleBackToNow}
+                                tasks={tasks}
+                    />
+                </div>
+            </div>
             <AppFooter/>
         </>
     );

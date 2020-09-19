@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 function formatTime(t) {
-    return format(t, "dd.MM.yyyy HH:mm:ss.SSS");
+    return format(t, "dd.MM.yyyy HH:mm");
 }
 
 const useStyles = makeStyles((theme) => {
@@ -22,7 +22,7 @@ function Clock() {
 
     useInterval(() => {
         setCtime(new Date());
-    }, 1);
+    }, 6000);
     return (
         <>
             <Typography variant={"body2"} component={"span"} className={classes.clock}>
