@@ -8,6 +8,7 @@ import green from "@material-ui/core/colors/green";
 import grey from "@material-ui/core/colors/grey";
 import {red, yellow} from "@material-ui/core/colors";
 import {useDispatch} from "react-redux";
+import {todoActions} from "../reducers/todoReducer";
 
 const {v4: uuidv4} = require('uuid');
 
@@ -78,7 +79,7 @@ function InputTask({
     const dispatch = useDispatch();
     const addTask = newTask => {
         const myAction = {
-            type: "ADD_TASK",
+            type: todoActions.addTask,
             payload: newTask
         };
         dispatch(myAction);

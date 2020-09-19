@@ -7,7 +7,14 @@ import InputTask from "./components/InputTask";
 import TaskList from "./components/TaskList";
 import SelectDate from "./components/SelectDate";
 import {useDispatch, useSelector} from "react-redux";
-import {getDisplayedTasks, getError, getSearchText, getSelectedDate, getTasks} from "./reducers/todoReducer";
+import {
+    getDisplayedTasks,
+    getError,
+    getSearchText,
+    getSelectedDate,
+    getTasks,
+    todoActions
+} from "./reducers/todoReducer";
 
 function App() {
     const tasks = useSelector(getTasks);
@@ -19,21 +26,21 @@ function App() {
 
     const setError = newError => {
         dispatch({
-            type: "SET_ERROR",
+            type: todoActions.setError,
             payload: newError
         })
     };
 
     const handelSearch = (event) => {
         dispatch({
-            type: "SET_SEARCH_TEXT",
+            type: todoActions.setSearchText,
             payload: event.target.value
         })
     };
 
     const setSelectedDate = date => {
         dispatch({
-            type: "SET_SELECTED_DATE",
+            type: todoActions.setSelectedDate,
             payload: date
         })
     };

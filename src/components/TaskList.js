@@ -15,7 +15,7 @@ import TaskRender from "./TaskRender";
 import TaskLevel from "./TaskLevel";
 import TablePagination from "@material-ui/core/TablePagination";
 import {useDispatch, useSelector} from "react-redux";
-import {getTasks} from "../reducers/todoReducer";
+import {getTasks, todoActions} from "../reducers/todoReducer";
 
 function TaskList({
                       selectedDate,
@@ -46,14 +46,14 @@ function TaskList({
 
     const onTaskRemove = (taskRemove) => {
         dispatch({
-            type: "REMOVE_TASK",
+            type: todoActions.removeTask,
             payload: taskRemove
         })
     };
 
     const onStatusChange = (event, taskToChange) => {
         dispatch({
-            type: "SET_TASK_STATUS",
+            type: todoActions.setTaskStatus,
             payload: {
                 taskToChange,
                 newTaskStatus: event.target.checked
@@ -75,7 +75,6 @@ function TaskList({
     });
 
     // Bai tap 1: Thay Task List bang <Table> cua material-ui
-
     const classes = useStyles();
     return (
         <>
@@ -128,11 +127,7 @@ function TaskList({
                             onChangeRowsPerPage={handleChangeRowsPerPage}
                         />
                     </TableContainer>
-
-
-
                 </div>
-
             </div>
             <hr/>
             <TaskCounter tasks={tasks}/>
