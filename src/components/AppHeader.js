@@ -9,6 +9,10 @@ import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from '@material-ui/icons/Search';
 import {fade} from "@material-ui/core";
 import Clock from "./Clock";
+import MenuItem from "@material-ui/core/MenuItem";
+import {AccountCircle} from "@material-ui/icons";
+import Menu from "@material-ui/core/Menu";
+import {useSelector} from "react-redux";
 
 // Bai tap 3: hien thi dong ho he thong (build <Clock>)
 //           - Hien thi <Button> "GO TO TODAY" de nhay ngay cua calendar den ngay hien tai
@@ -73,7 +77,17 @@ function AppHeader({
                        handelSearch,
                        search
                    }) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const userName = useSelector
+    const open = Boolean(anchorEl);
     const classes = useStyles();
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className={classes.root}>
@@ -104,6 +118,35 @@ function AppHeader({
                             value={search}
                             onChange={handelSearch}
                         />
+                    </div>
+                    <div>
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>Profile</MenuItem>
+                            <MenuItem onClick={handleClose}>My account</MenuItem>
+                        </Menu>
                     </div>
                 </Toolbar>
             </AppBar>

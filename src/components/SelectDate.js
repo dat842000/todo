@@ -23,7 +23,7 @@ function SelectDate({selectedDate, onCalendarChange, tasks, handleBackToNow}) {
                         color="secondary"
                         size={"small"}
                         style={{margin: "15px"}}
-                >Back to now</Button>
+                >Today</Button>
             </div>
             <Calendar
                 onChange={onCalendarChange}
