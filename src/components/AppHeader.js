@@ -146,6 +146,13 @@ function AppHeader({
                     >
                         Sign In with Google
                     </button>
+                    <button
+                        onClick={() => {
+                            firebase.auth().signOut();
+                        }}
+                    >
+                        Sign Out
+                    </button>
                     <FirebaseAuthConsumer>
                         {({isSignedIn, user, providerId}) => {
                             return (
