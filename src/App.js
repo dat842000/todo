@@ -15,8 +15,8 @@ import {
     getTasks,
     todoActions
 } from "./reducers/todoReducer";
-import LoginDialog from "./components/LoginDialog";
 import {FirebaseAuthConsumer} from "@react-firebase/auth";
+import {FirestoreCollection} from "@react-firebase/firestore";
 
 function App() {
     const tasks = useSelector(getTasks);
@@ -57,10 +57,9 @@ function App() {
 
     return <>
         <FirebaseAuthConsumer>
-            {({isSignedIn, user}) => {
+            {({user}) => {
                 return <AppHeader handelSearch={handelSearch}
                                   search={searchText}
-                                  isSignedIn={isSignedIn}
                                   user={user}
                 />
             }}
@@ -74,6 +73,14 @@ function App() {
         />
 
         <div style={{display: "flex", flexDirection: "row"}}>
+            <div style={{flex: 1}}>
+                <FirestoreCollection path="tasks" limit={1}>
+                    {d => {
+                        console.log("d: ", d)
+                        return d.isLoading ? "Loading" : <pre>{JSON.stringify(d.value)}</pre>;
+                    }}
+                </FirestoreCollection>
+            </div>
             <div style={{flex: 1}}>
                 {displayedTasks.length > 0 &&
                 <TaskList
@@ -92,7 +99,6 @@ function App() {
             </div>
         </div>
         <AppFooter/>
-        <LoginDialog/>
     </>;
 }
 

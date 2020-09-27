@@ -8,7 +8,9 @@ import {createStore} from "redux";
 import rootReducer from "./reducers/rootReducer";
 import * as firebase from "firebase/app";
 import "firebase/auth";
-import {FirebaseAuthProvider} from "@react-firebase/auth";
+import {FirebaseAuthProvider, IfFirebaseAuthed, IfFirebaseUnAuthed} from "@react-firebase/auth";
+import {FirestoreProvider} from "@react-firebase/firestore";
+import LoginPage from "./components/LoginPage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAOsehrrTle-Mk80q8qO2TYPpGQazwqLmQ",
@@ -23,9 +25,17 @@ window.store = store;
 ReactDOM.render(
     <React.StrictMode>
         <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
-            <Provider store={store}>
-                <App/>
-            </Provider>
+            <IfFirebaseUnAuthed>
+                <LoginPage/>
+            </IfFirebaseUnAuthed>
+
+            <IfFirebaseAuthed>
+                <FirestoreProvider {...firebaseConfig} firebase={firebase}>
+                    <Provider store={store}>
+                        <App/>
+                    </Provider>
+                </FirestoreProvider>
+            </IfFirebaseAuthed>
         </FirebaseAuthProvider>
     </React.StrictMode>,
     document.getElementById('root')

@@ -13,7 +13,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {AccountCircle} from "@material-ui/icons";
 import Menu from "@material-ui/core/Menu";
 import {useDispatch, useSelector} from "react-redux";
-import {getFullName, getLastLoginSince, isUserLogin} from "../reducers/userReducer";
 import Button from "@material-ui/core/Button";
 import * as firebase from "firebase/app";
 
@@ -76,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
 function AppHeader({
                        handelSearch,
                        search,
-                       isSignedIn,
                        user
                    }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -97,11 +95,6 @@ function AppHeader({
 
     const handelLogout = () => {
         firebase.auth().signOut();
-    }
-
-    const handleLogin = () => {
-        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(googleAuthProvider);
     }
 
     return (
@@ -134,7 +127,6 @@ function AppHeader({
                             onChange={handelSearch}
                         />
                     </div>
-                    {isSignedIn &&
                     <div>
                         <IconButton
                             aria-label="account of current user"
@@ -165,12 +157,6 @@ function AppHeader({
                             <MenuItem onClick={handelLogout}>Logout</MenuItem>
                         </Menu>
                     </div>
-                    }
-                    {!isSignedIn &&
-                    <div>
-                        <Button style={{color: "white"}} onClick={handleLogin}>Login</Button>
-                    </div>
-                    }
                 </Toolbar>
             </AppBar>
         </div>
