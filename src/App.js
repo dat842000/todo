@@ -16,6 +16,7 @@ import {
     todoActions
 } from "./reducers/todoReducer";
 import LoginDialog from "./components/LoginDialog";
+import {FirebaseAuthConsumer} from "@react-firebase/auth";
 
 function App() {
     const tasks = useSelector(getTasks);
@@ -54,40 +55,45 @@ function App() {
         setSelectedDate(date);
     };
 
-    return (
-        <>
-            <AppHeader handelSearch={handelSearch}
-                       search={searchText}
-            />
+    return <>
+        <FirebaseAuthConsumer>
+            {({isSignedIn, user}) => {
+                return <AppHeader handelSearch={handelSearch}
+                                  search={searchText}
+                                  isSignedIn={isSignedIn}
+                                  user={user}
+                />
+            }}
+        </FirebaseAuthConsumer>
 
-            <InputTask error={error}
-                       selectedDate={selectedDate}
-                       setError={setError}
-                       displayedTodos={displayedTasks}
-            />
 
-            <div style={{display: "flex", flexDirection: "row"}}>
-                <div style={{flex: 1}}>
-                    {displayedTasks.length > 0 &&
-                    <TaskList
-                        setSelectedDate={setSelectedDate}
-                        selectedDate={selectedDate}
-                        displayedTodos={displayedTasks}
-                    />}
+        <InputTask error={error}
+                   selectedDate={selectedDate}
+                   setError={setError}
+                   displayedTodos={displayedTasks}
+        />
 
-                </div>
-                <div style={{flex: 1}}>
-                    <SelectDate selectedDate={selectedDate}
-                                onCalendarChange={onCalendarChange}
-                                handleBackToNow={handleBackToNow}
-                                tasks={tasks}
-                    />
-                </div>
+        <div style={{display: "flex", flexDirection: "row"}}>
+            <div style={{flex: 1}}>
+                {displayedTasks.length > 0 &&
+                <TaskList
+                    setSelectedDate={setSelectedDate}
+                    selectedDate={selectedDate}
+                    displayedTodos={displayedTasks}
+                />}
+
             </div>
-            <AppFooter/>
-            <LoginDialog/>
-        </>
-    );
+            <div style={{flex: 1}}>
+                <SelectDate selectedDate={selectedDate}
+                            onCalendarChange={onCalendarChange}
+                            handleBackToNow={handleBackToNow}
+                            tasks={tasks}
+                />
+            </div>
+        </div>
+        <AppFooter/>
+        <LoginDialog/>
+    </>;
 }
 
 export default App;

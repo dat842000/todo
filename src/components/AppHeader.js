@@ -13,9 +13,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {AccountCircle} from "@material-ui/icons";
 import Menu from "@material-ui/core/Menu";
 import {useDispatch, useSelector} from "react-redux";
-import {getFullName, getLastLoginSince, isUserLogin, userActions} from "../reducers/userReducer";
+import {getFullName, getLastLoginSince, isUserLogin} from "../reducers/userReducer";
 import Button from "@material-ui/core/Button";
-import {FirebaseAuthConsumer} from "@react-firebase/auth";
 import * as firebase from "firebase/app";
 
 // tao JSS = CSS in Javascript
@@ -76,13 +75,16 @@ const useStyles = makeStyles((theme) => ({
 
 function AppHeader({
                        handelSearch,
-                       search
+                       search,
+                       isSignedIn,
+                       user
                    }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const dispatch = useDispatch();
-    const fullName = useSelector(getFullName);
-    const since = useSelector(getLastLoginSince());
-    const loginIconVisible = useSelector(isUserLogin);
+
+    console.log("user ",user);
+    const fullName = user?.displayName;
+    const since = user?.metadata.lastSignInTime;
     const open = Boolean(anchorEl);
     const classes = useStyles();
     const handleMenu = (event) => {
@@ -93,20 +95,14 @@ function AppHeader({
         setAnchorEl(null);
     };
 
-    const showLoginPanel = () => {
-        dispatch({
-                type: userActions.showLoginDialog,
-                payload: null,
-            }
-        )
-    }
     const handelLogout = () => {
-        dispatch({
-            type: userActions.logout,
-        })
-
+        firebase.auth().signOut();
     }
 
+    const handleLogin = () => {
+        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(googleAuthProvider);
+    }
 
     return (
         <div className={classes.root}>
@@ -138,32 +134,7 @@ function AppHeader({
                             onChange={handelSearch}
                         />
                     </div>
-                    <button
-                        onClick={() => {
-                            const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-                            firebase.auth().signInWithPopup(googleAuthProvider);
-                        }}
-                    >
-                        Sign In with Google
-                    </button>
-                    <button
-                        onClick={() => {
-                            firebase.auth().signOut();
-                        }}
-                    >
-                        Sign Out
-                    </button>
-                    <FirebaseAuthConsumer>
-                        {({isSignedIn, user, providerId}) => {
-                            return (
-                                <pre style={{height: 300, overflow: "auto"}}>
-                                    {JSON.stringify({isSignedIn, user, providerId}, null, 2)}
-                                </pre>
-                            );
-                        }}
-                    </FirebaseAuthConsumer>
-
-                    {loginIconVisible &&
+                    {isSignedIn &&
                     <div>
                         <IconButton
                             aria-label="account of current user"
@@ -195,9 +166,9 @@ function AppHeader({
                         </Menu>
                     </div>
                     }
-                    {!loginIconVisible &&
+                    {!isSignedIn &&
                     <div>
-                        <Button style={{color: "white"}} onClick={showLoginPanel}>Login</Button>
+                        <Button style={{color: "white"}} onClick={handleLogin}>Login</Button>
                     </div>
                     }
                 </Toolbar>
