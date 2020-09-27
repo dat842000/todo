@@ -15,6 +15,7 @@ import {
     getTasks,
     todoActions
 } from "./reducers/todoReducer";
+import LoginDialog from "./components/LoginDialog";
 
 function App() {
     const tasks = useSelector(getTasks);
@@ -84,6 +85,7 @@ function App() {
                 </div>
             </div>
             <AppFooter/>
+            <LoginDialog/>
         </>
     );
 }

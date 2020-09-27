@@ -9,6 +9,12 @@ import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from '@material-ui/icons/Search';
 import {fade} from "@material-ui/core";
 import Clock from "./Clock";
+import MenuItem from "@material-ui/core/MenuItem";
+import {AccountCircle} from "@material-ui/icons";
+import Menu from "@material-ui/core/Menu";
+import {useDispatch, useSelector} from "react-redux";
+import {getFullName, getLastLoginSince, getUser, isUserLogin, userActions} from "../reducers/userReducer";
+import Button from "@material-ui/core/Button";
 
 // Bai tap 3: hien thi dong ho he thong (build <Clock>)
 //           - Hien thi <Button> "GO TO TODAY" de nhay ngay cua calendar den ngay hien tai
@@ -73,7 +79,35 @@ function AppHeader({
                        handelSearch,
                        search
                    }) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const dispatch = useDispatch();
+    const fullName = useSelector(getFullName);
+    const since = useSelector(getLastLoginSince());
+    const loginIconVisible = useSelector(isUserLogin);
+    const open = Boolean(anchorEl);
     const classes = useStyles();
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const showLoginPanel =() => {
+        dispatch({
+                type: userActions.showLoginDialog,
+                payload: null,
+            }
+        )
+    }
+    const handelLogout =() => {
+        dispatch({
+            type :userActions.logout,
+        })
+
+    }
+
 
     return (
         <div className={classes.root}>
@@ -105,6 +139,43 @@ function AppHeader({
                             onChange={handelSearch}
                         />
                     </div>
+                    {loginIconVisible &&
+                        <div>
+                            <IconButton
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle/>
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={open}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleClose}>{fullName}</MenuItem>
+                                <MenuItem onClick={handleClose}>{since}</MenuItem>
+                                <MenuItem onClick={handelLogout}>Logout</MenuItem>
+                            </Menu>
+                        </div>
+                    }
+                    {!loginIconVisible &&
+                        <div>
+                            <Button style={{color: "white"}} onClick={showLoginPanel}>Login</Button>
+                        </div>
+                    }
                 </Toolbar>
             </AppBar>
         </div>
