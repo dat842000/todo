@@ -6,15 +6,27 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from "react-redux";
 import {createStore} from "redux";
 import rootReducer from "./reducers/rootReducer";
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import {FirebaseAuthProvider} from "@react-firebase/auth";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAOsehrrTle-Mk80q8qO2TYPpGQazwqLmQ",
+    authDomain: "react-todo-27092020.firebaseapp.com",
+    projectId: "react-todo-27092020",
+    databaseURL: "https://react-todo-27092020.firebaseio.com"
+};
 
 const store = createStore(rootReducer);
 window.store = store;
 
 ReactDOM.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <App/>
-        </Provider>
+        <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </FirebaseAuthProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

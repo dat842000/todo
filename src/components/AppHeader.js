@@ -13,11 +13,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {AccountCircle} from "@material-ui/icons";
 import Menu from "@material-ui/core/Menu";
 import {useDispatch, useSelector} from "react-redux";
-import {getFullName, getLastLoginSince, getUser, isUserLogin, userActions} from "../reducers/userReducer";
+import {getFullName, getLastLoginSince, isUserLogin, userActions} from "../reducers/userReducer";
 import Button from "@material-ui/core/Button";
-
-// Bai tap 3: hien thi dong ho he thong (build <Clock>)
-//           - Hien thi <Button> "GO TO TODAY" de nhay ngay cua calendar den ngay hien tai
+import {FirebaseAuthConsumer} from "@react-firebase/auth";
+import * as firebase from "firebase/app";
 
 // tao JSS = CSS in Javascript
 const useStyles = makeStyles((theme) => ({
@@ -94,16 +93,16 @@ function AppHeader({
         setAnchorEl(null);
     };
 
-    const showLoginPanel =() => {
+    const showLoginPanel = () => {
         dispatch({
                 type: userActions.showLoginDialog,
                 payload: null,
             }
         )
     }
-    const handelLogout =() => {
+    const handelLogout = () => {
         dispatch({
-            type :userActions.logout,
+            type: userActions.logout,
         })
 
     }
@@ -119,14 +118,14 @@ function AppHeader({
                         color="inherit"
                         aria-label="open drawer"
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Typography className={classes.title} variant="h6" noWrap>
                         TODOs List <Clock/>
                     </Typography>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
-                            <SearchIcon />
+                            <SearchIcon/>
                         </div>
                         <InputBase
                             placeholder="Search…"
@@ -134,47 +133,65 @@ function AppHeader({
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
-                            inputProps={{ 'aria-label': 'search' }}
+                            inputProps={{'aria-label': 'search'}}
                             value={search}
                             onChange={handelSearch}
                         />
                     </div>
+                    <button
+                        onClick={() => {
+                            const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+                            firebase.auth().signInWithPopup(googleAuthProvider);
+                        }}
+                    >
+                        Sign In with Google
+                    </button>
+                    <FirebaseAuthConsumer>
+                        {({isSignedIn, user, providerId}) => {
+                            return (
+                                <pre style={{height: 300, overflow: "auto"}}>
+                                    {JSON.stringify({isSignedIn, user, providerId}, null, 2)}
+                                </pre>
+                            );
+                        }}
+                    </FirebaseAuthConsumer>
+
                     {loginIconVisible &&
-                        <div>
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                            >
-                                <AccountCircle/>
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={open}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleClose}>{fullName}</MenuItem>
-                                <MenuItem onClick={handleClose}>{since}</MenuItem>
-                                <MenuItem onClick={handelLogout}>Logout</MenuItem>
-                            </Menu>
-                        </div>
+                    <div>
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
+                        >
+                            <AccountCircle/>
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>{fullName}</MenuItem>
+                            <MenuItem onClick={handleClose}>{since}</MenuItem>
+                            <MenuItem onClick={handelLogout}>Logout</MenuItem>
+                        </Menu>
+                    </div>
                     }
                     {!loginIconVisible &&
-                        <div>
-                            <Button style={{color: "white"}} onClick={showLoginPanel}>Login</Button>
-                        </div>
+                    <div>
+                        <Button style={{color: "white"}} onClick={showLoginPanel}>Login</Button>
+                    </div>
                     }
                 </Toolbar>
             </AppBar>
