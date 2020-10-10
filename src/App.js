@@ -15,10 +15,9 @@ import {
     getTasks,
     todoActions
 } from "./reducers/todoReducer";
-import {FirebaseAuthConsumer} from "@react-firebase/auth";
-import {FirestoreCollection} from "@react-firebase/firestore";
+import RemoteTaskList from "./components/RemoteTaskList";
 
-function App() {
+function App({currentUser}) {
     const tasks = useSelector(getTasks);
     const selectedDate = useSelector(getSelectedDate);
     const searchText = useSelector(getSearchText);
@@ -56,15 +55,10 @@ function App() {
     };
 
     return <>
-        <FirebaseAuthConsumer>
-            {({user}) => {
-                return <AppHeader handelSearch={handelSearch}
-                                  search={searchText}
-                                  user={user}
-                />
-            }}
-        </FirebaseAuthConsumer>
-
+        <AppHeader handelSearch={handelSearch}
+                   search={searchText}
+                   user={currentUser}
+        />
 
         <InputTask error={error}
                    selectedDate={selectedDate}
@@ -74,12 +68,8 @@ function App() {
 
         <div style={{display: "flex", flexDirection: "row"}}>
             <div style={{flex: 1}}>
-                <FirestoreCollection path="tasks" limit={1}>
-                    {d => {
-                        console.log("d: ", d)
-                        return d.isLoading ? "Loading" : <pre>{JSON.stringify(d.value)}</pre>;
-                    }}
-                </FirestoreCollection>
+                <RemoteTaskList/>
+
             </div>
             <div style={{flex: 1}}>
                 {displayedTasks.length > 0 &&
